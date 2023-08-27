@@ -1,10 +1,3 @@
-//
-//  MainVC.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
 import UIKit
 
 final class MainVC: DataLoadingVC {
@@ -19,7 +12,7 @@ final class MainVC: DataLoadingVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Andrey Rokhmanov"
+        title = String(localized: "MyName")
         configure()
         configureDataSource()
         getItemsList()
@@ -34,31 +27,30 @@ final class MainVC: DataLoadingVC {
         showLoadingView()
         NetworkManager.shared.getMainRequest() { [weak self] result in
             guard let self = self else { return }
-            self.dismissLoadingView()
+            dismissLoadingView()
             switch result {
             case .success(let itemsResult):
                 self.itemsArray = itemsResult.advertisements
                 self.updateDataSource(on: itemsResult.advertisements)
             case .failure(let error):
-                self.presentCustomAllertOnMainThred(allertTitle: "Bad Stuff Happend", message: error.rawValue, butonTitle: "Ok")
+                self.presentCustomAllertOnMainThred(allertTitle: String(localized: "Bad Stuff Happend"), message: error.rawValue, butonTitle: String(localized: "Ok"))
             }
         }
     }
     
     func configureDataSource(){
         dataSource = UICollectionViewDiffableDataSource<Section, ItemModel>(collectionView: collectionView, cellProvider: {(collectionView, indexPath, item)-> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCell.reuseID, for: indexPath) as! MainCell
-//            cell.imageView.image = nil
-            cell.tag = indexPath.row
-            cell.setFromAPI(item: item)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCell.reuseID, for: indexPath) as? MainCell
+            cell?.setFromAPI(item: item)
+            cell?.layoutIfNeeded()
             return cell
         })
     }
     
-    func updateDataSource(on randomImagesResults: [ItemModel] ){
+    func updateDataSource(on dataResult: [ItemModel] ){
         var snapShot = NSDiffableDataSourceSnapshot<Section, ItemModel>()
         snapShot.appendSections([.main])
-        snapShot.appendItems(randomImagesResults)
+        snapShot.appendItems(dataResult)
         DispatchQueue.main.async { self.dataSource.apply(snapShot, animatingDifferences: true) }
     }
     
@@ -66,8 +58,7 @@ final class MainVC: DataLoadingVC {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
-       collectionView.delegate = self
-//        collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(MainCell.self, forCellWithReuseIdentifier: MainCell.reuseID)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -83,13 +74,13 @@ final class MainVC: DataLoadingVC {
         ])
     }
     
-   
+    
 }
 
 
 //MARK: UICollectionViewDelegate, UICollectionViewDataSource
 extension MainVC: UICollectionViewDelegate{
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = itemsArray[indexPath.row]
         self.presentCustomDetailsVCOnMainThred(itemID: item.id)

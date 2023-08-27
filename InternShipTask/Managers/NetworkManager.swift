@@ -1,11 +1,3 @@
-//
-//  NetworkManager.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/27/23.
-//
-
-
 import UIKit
 
 class NetworkManager {
@@ -13,7 +5,6 @@ class NetworkManager {
     static let shared = NetworkManager()// пока изучаю dependency injection. Знаю что синглтоны не очень
     private let mainURL = "https://www.avito.st/s/interns-ios/main-page.json"
     private let deteilsURL = "https://www.avito.st/s/interns-ios/details/"
-    
     
     private init() {}
     
@@ -57,29 +48,29 @@ class NetworkManager {
     
     func getDetails(id: String, completed: @escaping (Result<DetailModel, ErrorMessages>) -> Void) {
         let endpoint = deteilsURL + "\(id).json"
-
+        
         guard let url = URL(string: endpoint) else {
             completed(.failure(.invalidRequest))
             return
         }
-
+        
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-
+            
             if let _ = error {
                 completed(.failure(.unableToComplete))
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
                 completed(.failure(.invalidResponse))
                 return
             }
-
+            
             guard let data = data else {
                 completed(.failure(.invalidData))
                 return
             }
-
+            
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy  = .convertFromSnakeCase
@@ -100,7 +91,6 @@ class NetworkManager {
             completed(image)
             return
         }
-        
         
         guard let url = URL(string: urlString) else{
             completed(nil)

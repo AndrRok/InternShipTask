@@ -1,10 +1,3 @@
-//
-//  UIViewController+Ext.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
 import UIKit
 
 extension UIViewController {

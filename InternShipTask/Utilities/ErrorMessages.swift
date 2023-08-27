@@ -1,10 +1,3 @@
-//
-//  ErrorMessages.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/27/23.
-//
-
 import Foundation
 
 enum ErrorMessages: String, Error {

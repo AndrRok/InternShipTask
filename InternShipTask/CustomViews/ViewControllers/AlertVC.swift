@@ -1,10 +1,3 @@
-//
-//  AlertVC.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
 import UIKit
 
 
@@ -52,7 +45,7 @@ final class AlertVC: UIViewController {
     
     private func configureTitleLabel(){
         containerView.addSubview(titleLabel)
-        titleLabel.text = alertTitle ?? "Something went wrong"
+        titleLabel.text = alertTitle ?? String(localized: "Something went wrong")
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         
@@ -68,7 +61,7 @@ final class AlertVC: UIViewController {
         containerView.addSubview(actionButton)
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         actionButton.setTitleColor(.label, for: .normal)
-        actionButton.setTitle(buttonTitle ?? "Ok", for: .normal)
+        actionButton.setTitle(buttonTitle ?? String(localized: "Ok"), for: .normal)
         actionButton.backgroundColor = .systemCyan
         actionButton.layer.cornerRadius = 10
         actionButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
@@ -84,7 +77,7 @@ final class AlertVC: UIViewController {
     private func configureMessageLabel(){
         containerView.addSubview(messageLabel)
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.text = message ?? "Unable to complete request"
+        messageLabel.text = message ?? String(localized: "Unable to complete request")
         messageLabel.numberOfLines = 4
         messageLabel.textAlignment = .center
         

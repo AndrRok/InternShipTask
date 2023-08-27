@@ -1,11 +1,3 @@
-//
-//  ItemModel.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
-
 import Foundation
 
 struct ItemsResponse: Codable, Hashable{
@@ -28,7 +20,6 @@ extension ItemModel{
         return lhs.uuid == rhs.uuid
     }
 }
-
 
 struct DetailModel: Codable, Hashable {
     let id: String

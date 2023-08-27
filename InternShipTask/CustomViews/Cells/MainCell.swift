@@ -1,10 +1,3 @@
-//
-//  MainCell.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
 import UIKit
 
 
@@ -24,8 +17,6 @@ final class MainCell: UICollectionViewCell {
         configure()
     }
     
-    
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -34,7 +25,6 @@ final class MainCell: UICollectionViewCell {
         super.prepareForReuse()
         imageView.setDefaultmage()
     }
-    
     
     public func setFromAPI(item: ItemModel){
         nameLabel.text = item.title

@@ -1,16 +1,8 @@
-//
-//  ParentVC.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
 import UIKit
 
 class DataLoadingVC: UIViewController {
     
     var activityIndicatorContainerView: UIView!
-    
     
     func showLoadingView() {
         activityIndicatorContainerView = UIView(frame: view.bounds)
@@ -32,16 +24,14 @@ class DataLoadingVC: UIViewController {
         ])
         
         activityIndicator.startAnimating()
-        //
     }
     
     func dismissLoadingView() {
-        DispatchQueue.main.async{ [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){ [self] in
             activityIndicatorContainerView.removeFromSuperview()
             activityIndicatorContainerView = nil
         }
     }
-    
 }
 
 

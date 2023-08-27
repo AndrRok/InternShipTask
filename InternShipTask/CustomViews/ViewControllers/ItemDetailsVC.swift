@@ -1,11 +1,3 @@
-//
-//  ItemDetailsVC.swift
-//  InternShipTask
-//
-//  Created by ARMBP on 8/26/23.
-//
-
-
 import UIKit
 
 
@@ -29,24 +21,18 @@ final class ItemDetailsVC: UIViewController {
     private var itemID: String
     private var item: DetailModel?
     
-    
     init(itemID: String) {
         self.itemID = itemID
-        
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         getItem()
-        
     }
     
     private func configure(){
@@ -59,12 +45,10 @@ final class ItemDetailsVC: UIViewController {
         configureActionButton()
         configurePriceLabel()
         configureLocationLabel()
-       // configureAddressLabel()
         configureDescriptionLabel()
         configureEmailLabel()
         configurePhoneNumberLabel()
         configureCreatedDateLabel()
-        
     }
     
     //MARK: - Network calls
@@ -79,7 +63,7 @@ final class ItemDetailsVC: UIViewController {
                     self.configure()
                 }
             case .failure(let error):
-                self.presentCustomAllertOnMainThred(allertTitle: "Bad Stuff Happend", message: error.rawValue, butonTitle: "Ok")
+                self.presentCustomAllertOnMainThred(allertTitle: String(localized: "Bad Stuff Happend"), message: error.rawValue, butonTitle: String(localized: "Ok"))
             }
         }
     }
@@ -108,7 +92,7 @@ final class ItemDetailsVC: UIViewController {
         itemImageView.translatesAutoresizingMaskIntoConstraints = false
         itemImageView.contentMode = .scaleAspectFit
         itemImageView.layer.cornerRadius =  10
-        itemImageView.downloadImage(fromURL: item?.imageUrl ?? "optional string")
+        itemImageView.downloadImage(fromURL: item?.imageUrl ?? "")
         
         NSLayoutConstraint.activate([
             imageContainer.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
@@ -134,7 +118,6 @@ final class ItemDetailsVC: UIViewController {
         closeButton.layer.cornerRadius = 8
         closeButton.layer.borderWidth = 1
         closeButton.layer.borderColor = UIColor.black.cgColor
-        
         closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
@@ -164,7 +147,6 @@ final class ItemDetailsVC: UIViewController {
         ])
     }
     
-    
     private func configureTitleLabel(){
         containerView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -183,7 +165,7 @@ final class ItemDetailsVC: UIViewController {
         containerView.addSubview(actionButton)
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         actionButton.setTitleColor(.label, for: .normal)
-        actionButton.setTitle("Добавить в корзину", for: .normal)
+        actionButton.setTitle(String(localized: "Добавить в корзину"), for: .normal)
         actionButton.backgroundColor = Colors.originalBlue
         actionButton.layer.cornerRadius = 10
         actionButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
@@ -207,10 +189,8 @@ final class ItemDetailsVC: UIViewController {
         NSLayoutConstraint.activate([
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             priceLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            //priceLabel.widthAnchor.constraint(equalToConstant: priceLabel.intrinsicContentSize.width)
         ])
     }
-    
     
     private func configureLocationLabel(){
         containerView.addSubview(location)
@@ -219,7 +199,7 @@ final class ItemDetailsVC: UIViewController {
         location.textAlignment = .left
         location.textColor = .systemGray2
         location.text = (item?.location ?? "") + ", " + (item?.address ?? "")
-         
+        
         NSLayoutConstraint.activate([
             location.topAnchor.constraint(equalTo: priceLabel.topAnchor),
             location.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor, constant: 10),
@@ -239,7 +219,6 @@ final class ItemDetailsVC: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
             descriptionLabel.leadingAnchor.constraint(equalTo: priceLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            //descriptionLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -5)
         ])
     }
     
@@ -249,13 +228,12 @@ final class ItemDetailsVC: UIViewController {
         createdDate.numberOfLines = 0
         createdDate.textAlignment = .left
         createdDate.textColor = .systemGray
-        createdDate.text = "Объявление создано: " + (item?.createdDate ?? "нет данных")
+        createdDate.text = String(localized: "Объявление создано: ") + (item?.createdDate ?? "???")
         
         NSLayoutConstraint.activate([
             createdDate.topAnchor.constraint(equalTo: phoneNumber.bottomAnchor, constant: 10),
             createdDate.leadingAnchor.constraint(equalTo: phoneNumber.leadingAnchor),
             createdDate.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            //createdDate.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -5)
         ])
     }
     
@@ -271,10 +249,8 @@ final class ItemDetailsVC: UIViewController {
             email.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
             email.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
             email.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            //email.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -5)
         ])
     }
-    
     
     private func configurePhoneNumberLabel(){
         containerView.addSubview(phoneNumber)
@@ -288,40 +264,15 @@ final class ItemDetailsVC: UIViewController {
             phoneNumber.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 10),
             phoneNumber.leadingAnchor.constraint(equalTo: email.leadingAnchor),
             phoneNumber.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
-            //phoneNumber.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -5)
         ])
     }
-    
-//    private func configureAddressLabel(){
-//        containerView.addSubview(address)
-//        address.translatesAutoresizingMaskIntoConstraints = false
-//        address.numberOfLines = 0
-//        address.textAlignment = .left
-//        address.textColor = .systemGray
-//        address.text = item?.address
-//
-//        NSLayoutConstraint.activate([
-//            address.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 5),
-//            address.leadingAnchor.constraint(equalTo: priceLabel.leadingAnchor),
-//            address.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-//            //descriptionLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -5)
-//        ])
-//    }
     
     @objc private func dismissVC(){
         dismiss(animated: true, completion: nil)
     }
     
     @objc func addToCart(){
-        //        if item != nil{
-        //            guard PersistenceManager.sharedRealm.inCartObjectExist(primaryKey: String(item.id)) else {
-        //                PersistenceManager.sharedRealm.addToCart(item: item, amount: 1)
-        //                dismiss(animated: true, completion: nil)
-        //                return
-        //            }
-        //            PersistenceManager.sharedRealm.editObjectAt(idForEdit: String(item.id), increase: true)
-        //            dismiss(animated: true, completion: nil)
-        //        }
+        print("Added to cart")
     }
 }
 
