@@ -9,6 +9,10 @@ import UIKit
 
 final class MainVC: DataLoadingVC {
     
+    enum Section{case main}
+    
+    private var dataSource: UICollectionViewDiffableDataSource<Section, ItemModel>!
+    
     private lazy var collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UIHelper.createMainLayout(in: view))
     private var itemsArray: [ItemModel] = []
     
@@ -17,6 +21,7 @@ final class MainVC: DataLoadingVC {
         super.viewDidLoad()
         title = "Andrey Rokhmanov"
         configure()
+        configureDataSource()
         getItemsList()
     }
     
@@ -33,19 +38,36 @@ final class MainVC: DataLoadingVC {
             switch result {
             case .success(let itemsResult):
                 self.itemsArray = itemsResult.advertisements
-                self.reloadCollectionView()
+                self.updateDataSource(on: itemsResult.advertisements)
             case .failure(let error):
                 self.presentCustomAllertOnMainThred(allertTitle: "Bad Stuff Happend", message: error.rawValue, butonTitle: "Ok")
             }
         }
     }
     
+    func configureDataSource(){
+        dataSource = UICollectionViewDiffableDataSource<Section, ItemModel>(collectionView: collectionView, cellProvider: {(collectionView, indexPath, item)-> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCell.reuseID, for: indexPath) as! MainCell
+//            cell.imageView.image = nil
+            cell.tag = indexPath.row
+            cell.setFromAPI(item: item)
+            return cell
+        })
+    }
+    
+    func updateDataSource(on randomImagesResults: [ItemModel] ){
+        var snapShot = NSDiffableDataSourceSnapshot<Section, ItemModel>()
+        snapShot.appendSections([.main])
+        snapShot.appendItems(randomImagesResults)
+        DispatchQueue.main.async { self.dataSource.apply(snapShot, animatingDifferences: true) }
+    }
+    
     private func configureCollectionView(){
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
-        collectionView.delegate = self
-        collectionView.dataSource = self
+       collectionView.delegate = self
+//        collectionView.dataSource = self
         collectionView.register(MainCell.self, forCellWithReuseIdentifier: MainCell.reuseID)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -61,39 +83,13 @@ final class MainVC: DataLoadingVC {
         ])
     }
     
-    private func reloadCollectionView(){
-        DispatchQueue.main.async{
-            self.collectionView.reloadData()
-            
-        }
-    }
+   
 }
 
 
 //MARK: UICollectionViewDelegate, UICollectionViewDataSource
-extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource{
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemsArray.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCell.reuseID, for: indexPath) as! MainCell
-        let item = itemsArray[indexPath.row]
-        
-        cell.tag = indexPath.row
-        if (cell.tag == indexPath.row) {
-            
-            cell.setFromAPI(item: item)
-            
-        }
-        return cell
-    }
-    
+extension MainVC: UICollectionViewDelegate{
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = itemsArray[indexPath.row]
         self.presentCustomDetailsVCOnMainThred(itemID: item.id)

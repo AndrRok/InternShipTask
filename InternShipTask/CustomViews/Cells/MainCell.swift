@@ -16,7 +16,7 @@ final class MainCell: UICollectionViewCell {
     private let locationLabel  = MainLabel(textAlignment: .left, fontSize: 14, weight: .medium)
     private let createdAtLabel  = MainLabel(textAlignment: .left, fontSize: 14, weight: .medium)
     private var container = UIView()
-     let imageView = ItemImage(frame: .zero)
+    private let imageView = ItemImage(frame: .zero)
     
     
     override init(frame: CGRect) {
@@ -30,12 +30,10 @@ final class MainCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        
-//        imageView.setDefaultmage()
-//    }
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.setDefaultmage()
+    }
     
     
     public func setFromAPI(item: ItemModel){
@@ -43,6 +41,7 @@ final class MainCell: UICollectionViewCell {
         priceLabel.text = item.price
         locationLabel.text = item.location
         createdAtLabel.text = item.createdDate
+        imageView.image = Images.placeholder
         imageView.downloadImage(fromURL: item.imageUrl)
     }
     

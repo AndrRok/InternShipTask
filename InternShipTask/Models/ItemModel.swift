@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct ItemsResponse: Decodable, Hashable{
+struct ItemsResponse: Codable, Hashable{
     let advertisements: [ItemModel]
 }
 
-struct ItemModel: Decodable{
+struct ItemModel: Codable, Hashable{
     let uuid = UUID()
     private enum CodingKeys : String, CodingKey { case id, title, price, location, imageUrl, createdDate }
     let id: String
@@ -23,14 +23,14 @@ struct ItemModel: Decodable{
     let createdDate: String
 }
 
-extension ItemModel: Hashable{
+extension ItemModel{
     static func ==(lhs: ItemModel, rhs: ItemModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
 }
 
 
-struct DetailModel: Decodable {
+struct DetailModel: Codable, Hashable {
     let id: String
     let title: String
     let price: String
