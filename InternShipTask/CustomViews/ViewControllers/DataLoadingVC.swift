@@ -2,7 +2,7 @@ import UIKit
 
 class DataLoadingVC: UIViewController {
     
-    var activityIndicatorContainerView: UIView!
+    var activityIndicatorContainerView = UIView(frame: .zero)
     
     func showLoadingView() {
         activityIndicatorContainerView = UIView(frame: view.bounds)
@@ -29,7 +29,7 @@ class DataLoadingVC: UIViewController {
     func dismissLoadingView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){ [self] in
             activityIndicatorContainerView.removeFromSuperview()
-            activityIndicatorContainerView = nil
+           
         }
     }
 }

@@ -73,8 +73,6 @@ final class MainVC: DataLoadingVC {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
-    
 }
 
 

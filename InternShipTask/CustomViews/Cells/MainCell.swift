@@ -11,7 +11,6 @@ final class MainCell: UICollectionViewCell {
     private var container = UIView()
     private let imageView = ItemImage(frame: .zero)
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
